@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "149743409512",
+    "firebase_url": "https://dnc-weather-b8ab4.firebaseio.com",
+    "project_id": "dnc-weather-b8ab4",
+    "storage_bucket": "dnc-weather-b8ab4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149743409512:android:34807d79671268b1",
+        "android_client_info": {
+          "package_name": "com.dncdemo.dncweather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149743409512-nlokt2aoe0jda61e8p0jf1ljbmc3jj8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQVIbP5o8Iothf5C0kwBrT5c62c5tM8No"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
