@@ -1,7 +1,17 @@
 package com.dncdemo.dncweather;
 
+import android.*;
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,17 +46,43 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallback {
 
-    String locationId="";
+    String locationId = "";
     Button submit;
-    TextView temperature,isDay,weatherType;
-    float lati=0.0f,longi=0.0f;
+    TextView temperature, isDay, weatherType;
+    double lati = 0.0, longi = 0.0;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_weather);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        if (checkPermission()==false) {
+            // TODO: Consider calling
+            requestPermission();
+        }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            System.out.println("loc "+location.getLatitude() + " : " + location.getLongitude());
+                            lati=location.getLatitude();
+                            longi=location.getLongitude();
+                            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.map);
+                            mapFragment.getMapAsync(DisplayWeather.this);
+
+                        }
+                    }
+                });
         weatherType=(TextView)findViewById(R.id.weatherType);
         temperature=(TextView)findViewById(R.id.temperature);
         isDay=(TextView)findViewById(R.id.isDay);
@@ -74,11 +113,6 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
                 }
             }
         });
-        lati=28.643f;
-        longi=77.118f;
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(DisplayWeather.this);
 
     }
     @Override
@@ -196,4 +230,64 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
             }
         }
     }
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+
+                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if (locationAccepted)
+                        Toast.makeText(DisplayWeather.this, "Permission Granted, Now you can access location data.", Toast.LENGTH_LONG).show();
+                    else {
+
+                        Toast.makeText(DisplayWeather.this, "Permission Denied, You cannot access location data.", Toast.LENGTH_LONG).show();
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+                                showMessageOKCancel("You need to allow access to the permissions",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                    requestPermissions(new String[]{ACCESS_FINE_LOCATION},
+                                                            PERMISSION_REQUEST_CODE);
+                                                }
+                                            }
+                                        });
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+
+                break;
+        }
+    }
+
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(DisplayWeather.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
 }

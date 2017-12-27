@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/land1"
+    android:background="@drawable/blue"
     android:weightSum="100">
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_weight="30">
         </View>
     </LinearLayout>
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,8 +49,8 @@
             android:inputType="textPersonName"
             android:lines="1"
             android:maxLength="128"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302" />
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -72,8 +72,8 @@
             android:layout_height="match_parent"
             android:layout_weight="90"
             android:lines="1"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
             android:inputType="textPersonName"
             android:maxLength="128"
             android:hint="Username:" />
@@ -98,8 +98,8 @@
             android:layout_height="match_parent"
             android:layout_weight="90"
             android:lines="1"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
             android:inputType="textEmailAddress"
             android:maxLength="128"
             android:hint="E-mail" />
@@ -129,8 +129,8 @@
             android:inputType="number"
             android:lines="1"
             android:maxLength="128"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302" />
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
 
         <View
             android:layout_width="0dp"
@@ -152,8 +152,8 @@
             android:layout_height="match_parent"
             android:layout_weight="90"
             android:lines="1"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
             android:maxLength="128"
             android:hint="Password:"
             android:inputType="textPassword"
@@ -179,8 +179,8 @@
             android:layout_height="match_parent"
             android:layout_weight="90"
             android:lines="1"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
             android:maxLength="128"
             android:hint="Confirm Password:"
             android:inputType="textPassword"
@@ -206,7 +206,7 @@
             android:layout_height="match_parent"
             android:layout_weight="30"
             android:text="Signup"
-            android:background="#f4a302"
+            android:background="#25BDAD"
             android:id="@+id/register"/>
         <View
             android:layout_width="0dp"

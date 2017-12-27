@@ -1,174 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/land1"
+    android:background="@drawable/blue"
     tools:context="com.dncdemo.dncweather.Home"
     android:orientation="vertical"
     android:weightSum="100">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="30"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
         android:weightSum="100">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:src="@drawable/dnc1"
+            android:layout_margin="30dp"
             android:layout_weight="90"
             android:id="@+id/code"/>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
-
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:weightSum="100">
+        android:layout_height="wrap_content"
+        android:layout_weight="40"
+        android:padding="20dp">
 
-        <View
-            android:layout_width="0dp"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"/>
+            app:cardCornerRadius="15dp"
+            android:elevation="15dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        app:srcCompat="@drawable/avatar" />
+                </LinearLayout>
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="90"
-            android:hint="Username:"
-            android:id="@+id/username"
-            android:inputType="text"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302"
-            android:lines="1"
-            android:maxLength="128"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="100">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:hint="Username:"
+                        android:textCursorDrawable="@android:color/darker_gray"
+                        android:id="@+id/username"
+                        android:inputType="text"
+                        android:textColor="#25BDAD"
 
+                        android:textColorHint="@android:color/darker_gray"
+                        android:lines="1"
+                        android:maxLength="128"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="100">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:hint="Password:"
+                        android:lines="1"
+                        android:textColor="#25BDAD"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:maxLength="128"
+                        android:inputType="textPassword"
+                        android:id="@+id/loginpassword" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:weightSum="100">
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="30"
+                        android:text="Login"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:background="#25BDAD"
+                        android:id="@+id/signin" />
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <Button
+                        android:id="@+id/signup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="Register"
+                        android:textAllCaps="false"
+                        android:textStyle="italic"
+                        android:textColor="#25BDAD"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:weightSum="100">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="90"
-            android:hint="Password:"
-            android:lines="1"
-            android:textColor="#f4a302"
-            android:textColorHint="#f4a302"
-            android:maxLength="128"
-            android:inputType="textPassword"
-            android:id="@+id/loginpassword" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8"
-        android:weightSum="100">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="65"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="30"
-            android:text="Login"
-            android:gravity="center_horizontal|center_vertical"
-            android:background="#f4a302"
-            android:id="@+id/signin" />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
-
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="18.79" />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:weightSum="100">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="68dp"
-            android:layout_weight="36.22"/>
-
-        <Button
-            android:id="@+id/signup"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="30"
-            android:background="@android:color/transparent"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="Signup"
-            android:textColor="#f4a302"
-            android:textSize="20sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-
 
 </LinearLayout>
