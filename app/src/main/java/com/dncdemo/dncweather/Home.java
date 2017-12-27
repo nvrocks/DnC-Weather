@@ -70,7 +70,7 @@ public class Home extends AppCompatActivity {
                                     Intent i = new Intent(.this,StudentProfile.class);
                                     i.putExtra("reg",regnum.getText().toString().trim());
                                     startActivity(i);*/
-                                    Toast.makeText(Home.this,"Login Successful",Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(Home.this,"Login Successful",Toast.LENGTH_LONG).show();
                                     Intent intent=new Intent(Home.this,DisplayWeather.class);
                                     startActivity(intent);
                                     finish();

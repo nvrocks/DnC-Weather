@@ -129,8 +129,8 @@ public class AutocompleteAdapter extends ArrayAdapter implements Filterable {
                     location.setCity(city);
                     location.setState(state);
                     location.setCountry(country);
+                    location.setId(id);
                     locationDetailList.add(location);
-
                 }
 
                 //return the LocationDetailList
