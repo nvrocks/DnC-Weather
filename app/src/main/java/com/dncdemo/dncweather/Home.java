@@ -40,6 +40,7 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //Toast.makeText(Home.this,"Please make sure to have a working internet connection",Toast.LENGTH_LONG).show();
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
         username = (EditText) findViewById(R.id.username);
         password = (EditText)findViewById(R.id.loginpassword);
