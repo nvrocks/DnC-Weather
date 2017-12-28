@@ -1,5 +1,6 @@
 package com.dncdemo.dncweather;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,6 +48,11 @@ public class Home extends AppCompatActivity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final ProgressDialog progressDialog=new ProgressDialog(Home.this);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage("Logging in");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
 
                 vel = new ValueEventListener() {
                     @Override
@@ -57,6 +63,7 @@ public class Home extends AppCompatActivity {
                             {
                                 Toast.makeText(Home.this,"Enter Username",Toast.LENGTH_LONG).show();
                                 f = 1;
+                                progressDialog.dismiss();
                                 break;
                             }
                             if(username.getText().toString().trim().equals(userDetails.child("username").getValue().toString()))
@@ -67,6 +74,7 @@ public class Home extends AppCompatActivity {
                                 if(password.getText().toString().trim().length() == 0)
                                 {
                                     Toast.makeText(Home.this,"Enter Password",Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
                                     break;
                                 }
                                 if(passw.equals(password.getText().toString().trim()))
@@ -80,6 +88,7 @@ public class Home extends AppCompatActivity {
                                     i.putExtra("reg",regnum.getText().toString().trim());
                                     startActivity(i);*/
                                     //Toast.makeText(Home.this,"Login Successful",Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
                                     Intent intent=new Intent(Home.this,DisplayWeather.class);
                                     startActivity(intent);
                                     finish();
@@ -87,13 +96,16 @@ public class Home extends AppCompatActivity {
                                 else
                                 {
                                     Toast.makeText(Home.this,"Invalid Password",Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
                                     break;
                                 }
                             }
                         }
                         if(f==0)
                         {
+                            progressDialog.dismiss();
                             Toast.makeText(Home.this,"User Not Registered",Toast.LENGTH_LONG).show();
+
                         }
                         //mDatabase.removeEventListener(vel);
                     }

@@ -3,6 +3,7 @@ package com.dncdemo.dncweather;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.StandaloneActionMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -100,6 +101,9 @@ public class Signup extends AppCompatActivity {
                                             }
                                             final String userId = mDatabase.push().getKey();
                                             mDatabase.child(userId).setValue(user1);
+                                            Toast.makeText(Signup.this,"Signup successful",Toast.LENGTH_LONG).show();
+                                            Intent i=new Intent(Signup.this,Home.class);
+                                            startActivity(i);
                                             Log.e(TAG, "User data is changed!" + user1.name + ", " + user1.username);
                                         }
 

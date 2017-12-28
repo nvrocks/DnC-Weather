@@ -2,6 +2,7 @@ package com.dncdemo.dncweather;
 
 import android.*;
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -56,6 +58,7 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
     double lati = 0.0, longi = 0.0;
     private FusedLocationProviderClient mFusedLocationClient;
     private static final int PERMISSION_REQUEST_CODE = 200;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +83,14 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
                                     .findFragmentById(R.id.map);
                             mapFragment.getMapAsync(DisplayWeather.this);
 
+
                         }
-                    }
-                });
+                    }});
         weatherType=(TextView)findViewById(R.id.weatherType);
         temperature=(TextView)findViewById(R.id.temperature);
         isDay=(TextView)findViewById(R.id.isDay);
         submit=(Button)findViewById(R.id.submit);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         final AutoCompleteTextView countrySearch = (AutoCompleteTextView) findViewById(R.id.input);
         final AutocompleteAdapter adapter = new AutocompleteAdapter(this,android.R.layout.simple_dropdown_item_1line);
         countrySearch.setThreshold(3);
@@ -102,10 +106,16 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DisplayWeather.this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 if(locationId!="")
                 {
+                    progressDialog=new ProgressDialog(DisplayWeather.this);
+                    progressDialog.setCancelable(false);
+                    progressDialog.setMessage("Loading");
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.show();
                     new GetLocationDetailsAsynTask().execute(locationId);
-                    new GetLocationGeoAsynTask().execute(locationId);
+                    //new GetLocationGeoAsynTask().execute(locationId);
                 }
                 else
                 {
@@ -169,12 +179,12 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
                     String isday=job.getString("IsDayTime");
                     System.out.println(weather+" : "+tempera+"*C, "+isday);
                     weatherType.setText(weather);
-                    temperature.setText(tempera);
+                    temperature.setText(tempera+ (char) 0x00B0);
                     isDay.setText(isday);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                new GetLocationGeoAsynTask().execute(locationId);
 
             }
         }
@@ -211,6 +221,7 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progressDialog.dismiss();
             if(s!=null)
             {
                 try {
@@ -280,6 +291,25 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
+
+    /*@Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        new AlertDialog.Builder(DisplayWeather.this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Close Application")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }*/
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(DisplayWeather.this)
