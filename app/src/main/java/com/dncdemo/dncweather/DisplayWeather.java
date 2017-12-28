@@ -59,6 +59,7 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
     private FusedLocationProviderClient mFusedLocationClient;
     private static final int PERMISSION_REQUEST_CODE = 200;
     ProgressDialog progressDialog;
+    AutoCompleteTextView countrySearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,14 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
                             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                                     .findFragmentById(R.id.map);
                             mapFragment.getMapAsync(DisplayWeather.this);
+                            //25.3354499%2C83.0307572
+                            String ur=lati+"%2C"+longi;
+                            progressDialog=new ProgressDialog(DisplayWeather.this);
+                            progressDialog.setCancelable(false);
+                            progressDialog.setMessage("Loading");
+                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            progressDialog.show();
+                            new GetLocationIdAsyn().execute(ur);
 
 
                         }
@@ -91,7 +100,7 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         isDay=(TextView)findViewById(R.id.isDay);
         submit=(Button)findViewById(R.id.submit);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        final AutoCompleteTextView countrySearch = (AutoCompleteTextView) findViewById(R.id.input);
+        countrySearch = (AutoCompleteTextView) findViewById(R.id.input);
         final AutocompleteAdapter adapter = new AutocompleteAdapter(this,android.R.layout.simple_dropdown_item_1line);
         countrySearch.setThreshold(3);
         countrySearch.setAdapter(adapter);
@@ -114,8 +123,8 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
                     progressDialog.setMessage("Loading");
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     progressDialog.show();
-                    new GetLocationDetailsAsynTask().execute(locationId);
-                    //new GetLocationGeoAsynTask().execute(locationId);
+                    //new GetLocationDetailsAsynTask().execute(locationId);
+                    new GetLocationGeoAsynTask().execute(locationId);
                 }
                 else
                 {
@@ -136,6 +145,61 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         //map.setMinZoomPreference(50.0f);
     }
 
+    public class GetLocationIdAsyn extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL("http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=OXLJwdqPr0hoSdR9WLGFVOKdc9DEqiLG&q="+params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                if (connection.getResponseCode() == 200) {
+                    InputStream in = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    String line;
+                    StringBuilder sb = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+                    String jsonString = sb.toString();
+                    return jsonString;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressDialog.dismiss();
+            if (s != null) {
+                try {
+                    String jsonString = s;
+                    JSONObject job=new JSONObject(s);
+                    String city=job.getString("LocalizedName");
+                    String state=job.getJSONObject("AdministrativeArea").getString("LocalizedName");
+                    String country=job.getJSONObject("Country").getString("LocalizedName");
+                    String id=job.getString("Key");
+                    lati=Double.parseDouble(job.getJSONObject("GeoPosition").getString("Latitude"));
+                    longi=Double.parseDouble(job.getJSONObject("GeoPosition").getString("Longitude"));
+                    System.out.println(id+" : "+city+", "+state+", "+country);
+                    countrySearch.setText(city+", "+state+", "+country);
+                    locationId=id;
+                    new GetLocationDetailsAsynTask().execute(locationId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //new GetLocationGeoAsynTask().execute(locationId);
+
+            }
+        }
+    }
     public class GetLocationDetailsAsynTask extends AsyncTask<String, Void, String>{
         @Override
         protected String doInBackground(String... params) {
@@ -168,6 +232,7 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progressDialog.dismiss();
             if(s!=null)
             {
                 try {
@@ -179,12 +244,12 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
                     String isday=job.getString("IsDayTime");
                     System.out.println(weather+" : "+tempera+"*C, "+isday);
                     weatherType.setText(weather);
-                    temperature.setText(tempera+ (char) 0x00B0);
+                    temperature.setText(tempera+ (char) 0x00B0+"C");
                     isDay.setText(isday);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                new GetLocationGeoAsynTask().execute(locationId);
+                //new GetLocationGeoAsynTask().execute(locationId);
 
             }
         }
@@ -221,14 +286,14 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
             if(s!=null)
             {
                 try {
                     String jsonString = s;
                     JSONObject job=new JSONObject(s);
-                    lati=Float.parseFloat(job.getJSONObject("GeoPosition").getString("Latitude"));
-                    longi=Float.parseFloat(job.getJSONObject("GeoPosition").getString("Longitude"));
+                    lati=Double.parseDouble(job.getJSONObject("GeoPosition").getString("Latitude"));
+                    longi=Double.parseDouble(job.getJSONObject("GeoPosition").getString("Longitude"));
                     System.out.println(lati+", "+longi);
                     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.map);
@@ -239,6 +304,7 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
 
 
             }
+            new GetLocationDetailsAsynTask().execute(locationId);
         }
     }
     private boolean checkPermission() {
@@ -291,25 +357,6 @@ public class DisplayWeather extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-
-    /*@Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        new AlertDialog.Builder(DisplayWeather.this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Close Application")
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-
-                })
-                .setNegativeButton("No", null)
-                .show();
-    }*/
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(DisplayWeather.this)

@@ -1,5 +1,6 @@
 package com.dncdemo.dncweather;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -64,6 +65,11 @@ public class Signup extends AppCompatActivity {
                     }
                     else {
                         flag=0;
+                        final ProgressDialog progressDialog=new ProgressDialog(Signup.this);
+                        progressDialog.setCancelable(false);
+                        progressDialog.setMessage("Signing Up");
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.show();
                         final DatabaseReference mDatabase1 = FirebaseDatabase.getInstance().getReference("users");
                         ValueEventListener vel1=new ValueEventListener() {
                             @Override
@@ -79,6 +85,7 @@ public class Signup extends AppCompatActivity {
                                 }
                                 if(flag==1)
                                 {
+                                    progressDialog.dismiss();
                                     Toast.makeText(Signup.this,"Username already registered",Toast.LENGTH_LONG).show();
                                 }
                                 else
@@ -101,6 +108,7 @@ public class Signup extends AppCompatActivity {
                                             }
                                             final String userId = mDatabase.push().getKey();
                                             mDatabase.child(userId).setValue(user1);
+                                            progressDialog.dismiss();
                                             Toast.makeText(Signup.this,"Signup successful",Toast.LENGTH_LONG).show();
                                             Intent i=new Intent(Signup.this,Home.class);
                                             startActivity(i);
@@ -110,6 +118,7 @@ public class Signup extends AppCompatActivity {
                                         @Override
                                         public void onCancelled(DatabaseError error) {
                                             // Failed to read value
+                                            progressDialog.dismiss();
                                             Log.e(TAG, "Failed to read user", error.toException());
                                         }
                                     });
